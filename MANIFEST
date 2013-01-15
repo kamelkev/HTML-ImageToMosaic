@@ -3,3 +3,5 @@ lib/HTML/ImagetoMosaic.pm
 MANIFEST
 Makefile.PL
 README
+/t/remote.t
+/t/html/remote_result.html

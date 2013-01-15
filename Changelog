@@ -1,3 +1,8 @@
 0.01    2013-01-14      Kevin Kamel <kamelkev@mailermailer.com>
 
         * Initial release to world.
+
+0.02    2013-01-15      Kevin Kamel <kamelkev@mailermailer.com>
+
+        * Fix issue whereby generated mosaic had improper color distortion
+        * Update test result such that correct result is confirmed

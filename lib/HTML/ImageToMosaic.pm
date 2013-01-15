@@ -6,7 +6,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION);
-$VERSION = '.01';
+$VERSION = '.02';
 
 use Carp;
 
@@ -119,8 +119,8 @@ sub generate {
   $image->Scale($scale . '%');
   $image->Scale(width => $width, height => $height);
 
-  # why is this required to get the proper result?
-  # $image->Write('demo.png');
+  # set quantum depth to 8 for proper color representation
+  $image->Set(depth=>8);
 
   my $table = ''; # placeholder for table mosaic data
   my ($prev_color,$span);

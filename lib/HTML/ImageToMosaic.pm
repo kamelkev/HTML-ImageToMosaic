@@ -6,7 +6,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION);
-$VERSION = '.02';
+$VERSION = '.01';
 
 use Carp;
 
@@ -60,12 +60,13 @@ BEGIN {
 
 =over 1
 
-=item new ([ OPTIONS ])
+=item new
 
 Instantiates the Mosaic object. Sets up class variables that are used
 during file parsing/processing. Possible options are:
 
-B<image> (optional). Pass in a scalar blob representing the image
+Input Parameters:
+  image - Pass in a scalar blob representing the image (optional)
 
 =back
 
@@ -90,11 +91,19 @@ sub new {
 
 =pod
 
-=over 8
+=over 1
 
-=item generate( params )
+=item generate
 
 Processes the image data specified either through the constructor or setter.
+
+Input Parameters:
+
+ pixel_size - size of the "pixel" you want in the final rendering (optional)
+ mode - technique to use to generate a mosaic, can be either "resize" or the default "scale" (optional)
+ filter - resize mode allows a variety of filters to be used including:
+          Point, Box, Triangle, Hermite, Hanning, Hamming, Blackman, Gaussian, Quadratic, 
+          Cubic, Catrom, Mitchell, Lanczos, Bessel, Sinc
 
 =cut
 
@@ -115,9 +124,17 @@ sub generate {
   my $pixel_size = $$params{pixel_size} || 10;
   my $scale = 100 / $pixel_size;
 
-  # shrink the image down, then embiggen it, creates pixels of requested size
-  $image->Scale($scale . '%');
-  $image->Scale(width => $width, height => $height);
+  # shrink the image down using mode, then embiggen it, creates pixels of requested size
+  if ($$params{mode} && $$params{mode} =~ m/resize/i) {
+    my $filter = $$params{filter} // 'box';
+
+    $image->Resize(geometry => $scale . '%', filter => $filter);
+    $image->Resize(width => $width, height => $height);
+  }
+  else {
+    $image->Scale($scale . '%');
+    $image->Scale(width => $width, height => $height);
+  }
 
   # set quantum depth to 8 for proper color representation
   $image->Set(depth=>8);
